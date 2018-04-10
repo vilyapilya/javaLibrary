@@ -1,11 +1,20 @@
 package com.testpack;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.awt.*;
+
+@Path("/test")
 public class Book {
 
-    private String authorFirstName;
+    private String title;
 
-    public void setAuthorFirstName(String name) {
-        this.authorFirstName = name;
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void add() {
