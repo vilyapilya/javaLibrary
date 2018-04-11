@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="book" class="com.testpack.Book">
             <property name = "title" value = "Idiot" />
+
     </bean>
 
 </beans>
