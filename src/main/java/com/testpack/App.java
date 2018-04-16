@@ -11,7 +11,7 @@ import javax.servlet.ServletContext;
 import java.util.Set;
 import java.util.HashSet;
 
-@ApplicationPath("/app")
+//@ApplicationPath("/")
 public class App {
 
 //    protected ApplicationContext springContext;
@@ -42,7 +42,7 @@ public class App {
 //        obj.add();
         System.out.println("called!!!!!!!x");
         LibraryApp libapp = new LibraryApp();
-        libapp.getSingletons();
+//        libapp.getSingletons();
 
     }
 

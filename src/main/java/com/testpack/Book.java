@@ -11,16 +11,11 @@ public class Book {
 
     private String title;
 
-//    @PUT
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getTitle() {
-        return this.title;
+        return "ttttt";
     }
 
     public void add() {
