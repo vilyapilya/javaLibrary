@@ -4,33 +4,66 @@ import dao.HibernateDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.persistence.*;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/test")
 @Entity
+@Table(name="books")
 public class Book {
 
-    @Id
     private int id;
     private String title;
+
+
+
+
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
+    }
+
     private int author_id;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getTitle() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
-
         HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
-        String result = dao.getBook();
-        return result;
+        List<String> result = dao.getTitles();
+        return result.toString();
+    }
+
+    @GET
+    @Path("/add")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String createBook() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
+        HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
+        dao.addBookEntry("New Book", 2);
+        return "Adding a bew book";
+
     }
 
     public void add() {

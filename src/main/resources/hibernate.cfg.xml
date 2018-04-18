@@ -11,5 +11,7 @@
         <property name="connection.pool_size">10</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <mapping class="com.testpack.Book" />
+
     </session-factory>
 </hibernate-configuration>

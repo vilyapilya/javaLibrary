@@ -1,5 +1,7 @@
 package dao;
 
+import com.testpack.Book;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class HibernateDao {
@@ -34,9 +39,26 @@ public class HibernateDao {
 
     public String getBook() {
         String hql = "select count(*) from Book";
-        System.out.println("WWWWWWEWE" + getSessionFactory());
         Query query = getSessionFactory().openSession().createQuery(hql);
         return query.uniqueResult().toString();
+    }
+
+    public List<String> getTitles() {
+        String hql = "select title from Book";
+        Query query = getSessionFactory().openSession().createQuery(hql);
+        System.out.println(query.list() + "ooiuouiouiouoiuo");
+        return query.getResultList();
+    }
+
+    public void addBookEntry(String title, int author_id) {
+        Session session  = getSessionFactory().openSession();
+        session.beginTransaction();
+        Book bookEnt = new Book();
+        bookEnt.setTitle(title);
+        bookEnt.setAuthor_id(author_id);
+
+        session.save(bookEnt);
+        session.getTransaction().commit();
     }
 
 }
