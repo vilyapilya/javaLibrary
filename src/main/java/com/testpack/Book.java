@@ -16,9 +16,7 @@ public class Book {
 
     private int id;
     private String title;
-
-
-
+    private int author_id;
 
     public int getAuthor_id() {
         return author_id;
@@ -28,7 +26,13 @@ public class Book {
         this.author_id = author_id;
     }
 
-    private int author_id;
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -36,19 +40,20 @@ public class Book {
         return id;
     }
 
+
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setTitle(String title) {
+    public void setShowBooks(String title) {
         this.title = title;
     }
 
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getTitle() {
+    public String showBooks() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
         HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
         List<String> result = dao.getTitles();

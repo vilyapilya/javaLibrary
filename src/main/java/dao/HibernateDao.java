@@ -14,7 +14,6 @@ import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class HibernateDao {
@@ -54,8 +53,11 @@ public class HibernateDao {
         Session session  = getSessionFactory().openSession();
         session.beginTransaction();
         Book bookEnt = new Book();
-        bookEnt.setTitle(title);
+        bookEnt.setShowBooks(title);
         bookEnt.setAuthor_id(author_id);
+
+        System.out.println(bookEnt.showBooks());
+        System.out.println(bookEnt.getAuthor_id());
 
         session.save(bookEnt);
         session.getTransaction().commit();
