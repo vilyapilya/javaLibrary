@@ -52,6 +52,13 @@ public class HibernateDao {
         return query.getResultList();
     }
 
+    public String getBook(int id) {
+        String hql = "select title from Book where id = :id";
+        Query query = getSessionFactory().openSession().createQuery(hql);
+        query.setParameter("id", id);
+        return query.getSingleResult().toString();
+    }
+
     public void addBookEntry(String title, int author_id) {
         Session session  = getSessionFactory().openSession();
         session.beginTransaction();
@@ -68,6 +75,18 @@ public class HibernateDao {
         session.beginTransaction();
         Query q = session.createQuery("delete from Book where id = :bookId");
         q.setParameter("bookId", bookId);
+        q.executeUpdate();
+        session.getTransaction().commit();
+    }
+
+    public void updateBookEntry(int bookId, String newTitle, int newAuthorId) {
+        Session session  = getSessionFactory().openSession();
+        session.beginTransaction();
+        Query q = session.createQuery(
+                "update Book set title = :newTitle, author_id = :newAuthorId where id = :bookId");
+        q.setParameter("bookId", bookId);
+        q.setParameter("newTitle", newTitle);
+        q.setParameter("newAuthorId", newAuthorId);
         q.executeUpdate();
         session.getTransaction().commit();
     }

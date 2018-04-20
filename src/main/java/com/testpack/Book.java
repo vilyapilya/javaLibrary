@@ -3,14 +3,14 @@ package com.testpack;
 import dao.HibernateDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.transaction.annotation.Isolation;
-
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+//Figure out ctx part
+//Find out about schema creation
 @Path("/test")
 @Entity
 @Table(name="books")
@@ -60,6 +60,15 @@ public class Book {
         return result.toString();
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String showSingleBook(@PathParam("id") int id) {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
+        HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
+        return dao.getBook(id);
+    }
+
     //Figure out JSON
     @POST
     @Path("/add")
@@ -83,5 +92,19 @@ public class Book {
         HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
         dao.deleteBookEntry(bookId);
         return ("the book is deleted");
+    }
+
+    @POST
+    @Path("/edit/{id}")
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Transactional
+    public String updateBook(@PathParam("id") int bookId,
+                             @FormParam("author_id") int author_id,
+                             @FormParam("title") String title) {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
+        HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
+        dao.updateBookEntry(bookId, title, author_id);
+        return ("the book is edited");
     }
 }
