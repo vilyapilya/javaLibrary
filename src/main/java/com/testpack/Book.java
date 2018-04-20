@@ -11,6 +11,7 @@ import java.util.List;
 
 //Figure out ctx part
 //Find out about schema creation
+//Find out .gitignore for maven
 @Path("/test")
 @Entity
 @Table(name="books")

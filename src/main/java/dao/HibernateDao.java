@@ -26,6 +26,7 @@ public class HibernateDao {
     private SessionFactory sessionFactory;
     private static StandardServiceRegistry standardServiceRegistry;
 
+    //Figure out why session is null
     public SessionFactory getSessionFactory() {
         if(this.sessionFactory == null) {
             standardServiceRegistry = new StandardServiceRegistryBuilder().configure().build();
