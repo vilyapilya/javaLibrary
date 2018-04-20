@@ -10,9 +10,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -45,7 +49,6 @@ public class HibernateDao {
     public List<String> getTitles() {
         String hql = "select title from Book";
         Query query = getSessionFactory().openSession().createQuery(hql);
-        System.out.println(query.list() + "ooiuouiouiouoiuo");
         return query.getResultList();
     }
 
@@ -56,10 +59,16 @@ public class HibernateDao {
         bookEnt.setShowBooks(title);
         bookEnt.setAuthor_id(author_id);
 
-        System.out.println(bookEnt.showBooks());
-        System.out.println(bookEnt.getAuthor_id());
-
         session.save(bookEnt);
+        session.getTransaction().commit();
+    }
+
+    public void deleteBookEntry(int bookId) {
+        Session session  = getSessionFactory().openSession();
+        session.beginTransaction();
+        Query q = session.createQuery("delete from Book where id = :bookId");
+        q.setParameter("bookId", bookId);
+        q.executeUpdate();
         session.getTransaction().commit();
     }
 

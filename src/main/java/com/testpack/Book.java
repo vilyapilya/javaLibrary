@@ -3,8 +3,10 @@ package com.testpack;
 import dao.HibernateDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.transaction.annotation.Isolation;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 @Path("/test")
 @Entity
 @Table(name="books")
+@Transactional
 public class Book {
 
     private int id;
@@ -40,8 +43,6 @@ public class Book {
         return id;
     }
 
-
-
     public void setId(int id) {
         this.id = id;
     }
@@ -49,7 +50,6 @@ public class Book {
     public void setShowBooks(String title) {
         this.title = title;
     }
-
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -60,18 +60,28 @@ public class Book {
         return result.toString();
     }
 
-    @GET
+    //Figure out JSON
+    @POST
     @Path("/add")
+    @Consumes("application/x-www-form-urlencoded")
     @Produces(MediaType.TEXT_PLAIN)
-    public String createBook() {
+    public String createBook(@FormParam("author_id") int author_id,
+                             @FormParam("title") String title) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
         HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
-        dao.addBookEntry("New Book", 2);
+        dao.addBookEntry(title, author_id);
         return "Adding a bew book";
-
     }
 
-    public void add() {
-        System.out.println("The book is added");
+    @POST
+    @Path("/remove/{id}")
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Transactional
+    public String deleteBook(@PathParam("id") int bookId) {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("Beans.xml");
+        HibernateDao dao = ctx.getBean("hibernateDao", HibernateDao.class);
+        dao.deleteBookEntry(bookId);
+        return ("the book is deleted");
     }
 }
